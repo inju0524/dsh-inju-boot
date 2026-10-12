@@ -1,0 +1,10 @@
+# 仓库里一律 LF（动画本体是逐字节比较的，统一行尾省得踩坑）
+* text=auto eol=lf
+
+# 二进制素材
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.woff2 binary
+*.ico binary

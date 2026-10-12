@@ -1,0 +1,79 @@
+{
+  "name": "dsh-inju-boot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DeepSeek Harness 启动动画插件：每次启动 Harness 时全屏播放 INJU 3D 粒子启动动画（WebGL2 · 6 万粒子 · 花 → 月球 → 虚影文字 → 实体 LOGO · 极客 HUD），带背景音乐自动播放、顶栏融入动画与一整页设置。",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "icon.svg",
+    "locale",
+    "assets",
+    "tools",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node tools/selftest.mjs && node tools/selftest-client.mjs && node tools/check-animation.mjs",
+    "test:host": "node tools/selftest.mjs",
+    "test:client": "node tools/selftest-client.mjs",
+    "test:animation": "node tools/check-animation.mjs",
+    "test:live": "node tools/selftest-live.mjs",
+    "check": "node --check index.js && node --check client.js"
+  },
+  "meta": {
+    "title": "INJU 启动动画",
+    "description": "每次启动 DeepSeek Harness 自动播放 INJU 3D 粒子启动动画（WebGL2 · 6 万粒子 · 花 → 月球 → 虚影文字 → 实体 LOGO），含可选的极客 HUD / 终端层；全部参数可在设置里调整。"
+  },
+  "icon": "./icon.svg",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "dsh-bundle",
+    "deepseek",
+    "deepseek-harness",
+    "startup-animation",
+    "boot-animation",
+    "boot-splash",
+    "inju",
+    "webgl2",
+    "particles",
+    "cordis"
+  ],
+  "dsh": {
+    "id": "dsh-inju-boot",
+    "name": "INJU 启动动画",
+    "permissions": "启动覆盖层（shell.overlay）, 设置页（settings.section）, 本地 HTTP 路由（/api/inju-boot/*）",
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": []
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inju0524/dsh-inju-boot.git"
+  },
+  "homepage": "https://github.com/inju0524/dsh-inju-boot#readme",
+  "bugs": {
+    "url": "https://github.com/inju0524/dsh-inju-boot/issues"
+  },
+  "author": "inju0524",
+  "license": "MIT"
+}

@@ -1,0 +1,7 @@
+{
+  "meta.title": "INJU 启动动画",
+  "meta.description": "每次启动 DeepSeek Harness 时全屏播放 INJU 3D 粒子启动动画（WebGL2 · 6 万粒子 · 花 → 月球 → 虚影文字 → 实体 LOGO），含可选的极客 HUD / 终端层；全部参数可在设置里调整。",
+  "nav": "INJU 启动动画",
+  "title": "INJU 启动动画",
+  "lead": "每次启动 DeepSeek Harness 时，全屏播放本项目目录下那支 INJU 3D 粒子动画，播完自动淡出。下面的参数保存后立刻生效，下次启动沿用。"
+}

@@ -1,0 +1,7 @@
+{
+  "meta.title": "INJU Boot Animation",
+  "meta.description": "Plays the INJU 3D particle startup animation (WebGL2 · 60k particles · flower → moon → ghost text → solid logo) full-screen every time DeepSeek Harness starts, with an optional geek HUD / terminal layer. Every parameter is adjustable in Settings.",
+  "nav": "INJU Boot Animation",
+  "title": "INJU Boot Animation",
+  "lead": "Plays the INJU 3D particle animation from this project full-screen on every DeepSeek Harness start, then fades out. Every parameter below is saved and reused on the next start."
+}

@@ -1,0 +1,31 @@
+name: test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # 插件零依赖，不需要 npm install。
+      # 三套自检都在仓库里自带副本（assets/）上跑，不依赖任何本机环境。
+      - name: 语法检查
+        run: node --check index.js && node --check client.js
+
+      - name: Host 半身自检
+        run: node tools/selftest.mjs
+
+      - name: 浏览器半身自检
+        run: node tools/selftest-client.mjs
+
+      - name: 动画本体自检（真跑 hudDraw）
+        run: node tools/check-animation.mjs

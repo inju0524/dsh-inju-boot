@@ -1,0 +1,14 @@
+# dsh-inju-boot bundle patch：把插件挂进 profile 的层栈。
+#
+# 只插一行：Host 半身由这一行挂载，浏览器半身由 package.json 的 dsh.client 声明，
+# 并且绑定在 name 为裸包名的这一行上。
+#
+# 这一行的 config 是插件配置的「初始种子」：真正生效的值 =
+#   内置默认值 ← 这里的 config ← <DSH_HOME>/inju-boot/config.json（设置页写这里）
+# 所以设置页改动不会被这份 YAML 覆盖；想改出厂默认才动这里。
+- insert:
+    - id: inju-boot
+      name: 'dsh-inju-boot'
+      config:
+        enabled: true
+        oncePerSession: true
