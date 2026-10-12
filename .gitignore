@@ -8,7 +8,7 @@ yarn.lock
 *.log
 frames/
 *.webm
-preview-*.png
+/preview-*.png
 
 # 编辑器 / 系统
 .vscode/

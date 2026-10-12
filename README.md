@@ -17,6 +17,8 @@
 
 </div>
 
+![INJU 启动动画 · 花体阶段](docs/preview-flower.webp)
+
 ---
 
 ## 这是什么
@@ -36,6 +38,12 @@
 左上角的 `root@deepseek-harness:~# dsh --profile desktop`、遥测里的 `MODEL` / `RUNTIME` 字段、
 以及一整套 DSH 启动序列的终端日志。
 
+<p align="center">
+  <img src="docs/preview-logo.webp" width="880" alt="INJU 启动动画 · 实体 LOGO 阶段">
+  <br>
+  <sub>第 09 阶段 · 实体平面 LOGO —— 极客 HUD 全程都在，跟着粒子一起吃泛光与像素偏移闪切</sub>
+</p>
+
 ```
 y=  27  root@deepseek-harness:~# dsh --profile desktop          PHASE   2 / 10  花体 · 环绕巡游
 y=  29                    D E E P S E E K   H A R N E S S
@@ -51,6 +59,24 @@ y= 935  [███░░░░░░░░░░░░░░░░░░░░�
 
 > 上面是 `node tools/check-animation.mjs --dump` 打出来的**真实绘制调用**（1920×1080，t=2.0s）。
 > 想看你自己屏幕尺寸下的排版：`node tools/check-animation.mjs --dump --w=1440 --h=900 --t=9.5`
+
+<details>
+<summary>预览图是怎么来的（想自己重新生成的话）</summary>
+
+动画自带**静帧模式**：`?t=<秒>` 定格在指定时刻并暂停，`hud=0` 隐藏页面 DOM 装饰、`telemetry=1` 保留极客 HUD。
+插件把动画挂在 `/api/inju-boot/boot.html`，所以只要 Harness 在跑，直接用浏览器打开这个地址就能截图：
+
+```
+http://127.0.0.1:19387/api/inju-boot/boot.html?t=4.0&hud=0&telemetry=1     # 花体阶段
+http://127.0.0.1:19387/api/inju-boot/boot.html?t=10.5&hud=0&telemetry=1    # 月球阶段
+http://127.0.0.1:19387/api/inju-boot/boot.html?t=17.6&hud=0&telemetry=1    # 实体 LOGO
+```
+
+`docs/` 里的两张预览图就是这样抓的（headless Edge + CDP，等 90 帧后 `Page.captureScreenshot`，
+再转成 WebP）。**注意别加 `--disable-frame-rate-limit --disable-gpu-vsync`** —— 那两个开关会让
+`requestAnimationFrame` 的 dt 趋近 0，而 HUD 是每 1/30 秒才重绘一次，结果就是截到一张没有 HUD 的干净画面。
+
+</details>
 
 ---
 
@@ -299,6 +325,7 @@ dsh-inju-boot/
 ├── client.js               # 浏览器半身：启动覆盖层（音频桥 / 顶栏处理）+ 设置页（手写 ModuleLoader bundle）
 ├── icon.svg                # 插件图标
 ├── locale/{zh,en}.json     # 展示文案
+├── docs/                   # README 预览图（WebP）
 ├── assets/                 # 动画副本（独立 clone 时的兜底；放在动画项目里则走项目那份）
 ├── tools/                  # 三套自检 + 三个只读 asar 工具
 └── .github/workflows/      # CI：push / PR 自动跑三套自检
