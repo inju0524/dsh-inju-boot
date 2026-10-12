@@ -17,7 +17,29 @@
 
 </div>
 
-![INJU 启动动画 · 花体阶段](docs/preview-flower.webp)
+<p align="center">
+  <img src="docs/preview-stages.gif" width="720" alt="INJU 启动动画 · 10 个阶段">
+  <br>
+  <sub>6.3 秒走完全部 10 个阶段（每段约 0.6 秒，硬切）· 720×405 · 4 MB</sub>
+</p>
+
+### 十个环节
+
+| # | 阶段 | 时间 | 画面 |
+|---|---|---|---|
+| 01 | 汇聚 | 0 – 3.2s | 星尘云团被吸聚成一朵参数化 3D 雏菊（花瓣 / 花心 / 花托 / 花茎 / 地面亮点） |
+| 02 | 花体 · 环绕巡游 | 3.2 – 5.8s | 相机缓慢环绕，花瓣层次与花茎前后关系都看得到 |
+| 03 | 崩解 | 5.8 – 7.3s | 每颗粒子沿花心向外爆散，带湍流冲量与惯性拖尾 |
+| 04 | 重聚 | 7.3 – 9.3s | 回吸聚合成一颗 3D 粒子月球（撞击坑 / 月海 / 山脉） |
+| 05 | 月球 · 静默自转 | 9.3 – 11.7s | 坑谷环脊在光照下缓缓转出 |
+| 06 | 显影 | 11.7 – 14.4s | 月球 → 虚影文字，粒子变细、变弥散、开始抖动 |
+| 07 | 虚影 · 闪烁漂移 | 14.4 – 15.7s | 全息虚影闪烁、漂浮 |
+| 08 | 像素偏移闪切 | 15.7 – 16.45s | 28 条横向切片错位 + 13×11 块状位移 + RGB 分离 + 过曝闪白 |
+| 09 | 实体 · 平面 LOGO | 16.45 – 20.05s | 硬切为实体平面 LOGO，带扫光；残留粒子成为光晕 |
+| 10 | 循环 · 淡出 | 20.05 – 21.05s | 淡出并重新开始 |
+
+> 全部 10 个阶段的时长、手感、每阶段的粒子尺寸 / 抖动 / 爆散冲量 / 体积光都能在设置页调；
+> 上面这张表读的就是动画目录那份 `inju.config.js`。
 
 ---
 
@@ -39,10 +61,15 @@
 以及一整套 DSH 启动序列的终端日志。
 
 <p align="center">
-  <img src="docs/preview-logo.webp" width="880" alt="INJU 启动动画 · 实体 LOGO 阶段">
+  <img src="docs/preview-flower.webp" width="440" alt="花体阶段（完整分辨率）">
+  <img src="docs/preview-logo.webp" width="440" alt="实体 LOGO 阶段（完整分辨率）">
   <br>
-  <sub>第 09 阶段 · 实体平面 LOGO —— 极客 HUD 全程都在，跟着粒子一起吃泛光与像素偏移闪切</sub>
+  <sub>完整分辨率静帧：第 02 阶段 · 花体环绕巡游 &nbsp;|&nbsp; 第 09 阶段 · 实体平面 LOGO</sub>
 </p>
+
+它还带了 **DeepSeek Harness 的产品身份层**：顶部逐字拉开的 `DEEPSEEK HARNESS` 铭牌、
+左上角的 `root@deepseek-harness:~# dsh --profile desktop`、遥测里的 `MODEL` / `RUNTIME` 字段、
+以及一整套 DSH 启动序列的终端日志。
 
 ```
 y=  27  root@deepseek-harness:~# dsh --profile desktop          PHASE   2 / 10  花体 · 环绕巡游
@@ -61,7 +88,7 @@ y= 935  [███░░░░░░░░░░░░░░░░░░░░�
 > 想看你自己屏幕尺寸下的排版：`node tools/check-animation.mjs --dump --w=1440 --h=900 --t=9.5`
 
 <details>
-<summary>预览图是怎么来的（想自己重新生成的话）</summary>
+<summary>预览图 / 动图是怎么来的（想自己重新生成的话）</summary>
 
 动画自带**静帧模式**：`?t=<秒>` 定格在指定时刻并暂停，`hud=0` 隐藏页面 DOM 装饰、`telemetry=1` 保留极客 HUD。
 插件把动画挂在 `/api/inju-boot/boot.html`，所以只要 Harness 在跑，直接用浏览器打开这个地址就能截图：
@@ -72,9 +99,26 @@ http://127.0.0.1:19387/api/inju-boot/boot.html?t=10.5&hud=0&telemetry=1    # 月
 http://127.0.0.1:19387/api/inju-boot/boot.html?t=17.6&hud=0&telemetry=1    # 实体 LOGO
 ```
 
-`docs/` 里的两张预览图就是这样抓的（headless Edge + CDP，等 90 帧后 `Page.captureScreenshot`，
-再转成 WebP）。**注意别加 `--disable-frame-rate-limit --disable-gpu-vsync`** —— 那两个开关会让
-`requestAnimationFrame` 的 dt 趋近 0，而 HUD 是每 1/30 秒才重绘一次，结果就是截到一张没有 HUD 的干净画面。
+两张静帧就是这样抓的：headless Edge + CDP，等 90 帧后 `Page.captureScreenshot`，再转成 WebP（1920×1080，共 240 KB）。
+
+**hero 动图**是 10 段拼起来的：动画本体暴露了确定性单帧驱动 `window.__render.set(t)`，
+所以可以对每个阶段钉住播放头、各取 5 帧（段内连续、段间硬切），再交给 ffmpeg：
+
+```powershell
+ffmpeg -framerate 8 -i frames/f_%04d.png -vf "scale=720:-1:flags=lanczos,split[a][b];\
+[a]palettegen=max_colors=64:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" \
+  -loop 0 docs/preview-stages.gif
+```
+
+三个踩过的坑，省得下次再走一遍：
+
+1. **headless 下别加 `--disable-frame-rate-limit --disable-gpu-vsync`。** 那两个开关会让
+   `requestAnimationFrame` 的 dt 趋近 0，而 HUD 每 1/30 秒才重绘一次 —— 结果截到一张**没有 HUD** 的干净画面。
+   （用注入钩子数过 `fillText`：4 次 vs 去掉开关后的 10534 次。）
+2. **GIF 对这个画面极其不友好。** 每颗粒子每帧都在动，等于每帧都是全帧更新。
+   实测 800×450 / 90 帧 是 **16 MB**；把动画自带的 `render.grain`（每像素胶片噪点）临时关掉后直接降到 7.5 MB。
+   粒子数与数字雨开关几乎不影响体积（5.1 MB vs 5.1 MB），真正决定体积的只有**分辨率 × 帧数**。
+3. **ffmpeg 在这台机器上写不了 `%TEMP%`**（`Permission denied`），输出直接落仓库目录里就行。
 
 </details>
 
@@ -325,7 +369,7 @@ dsh-inju-boot/
 ├── client.js               # 浏览器半身：启动覆盖层（音频桥 / 顶栏处理）+ 设置页（手写 ModuleLoader bundle）
 ├── icon.svg                # 插件图标
 ├── locale/{zh,en}.json     # 展示文案
-├── docs/                   # README 预览图（WebP）
+├── docs/                   # README 的 hero 动图（10 阶段蒙太奇）+ 两张静帧
 ├── assets/                 # 动画副本（独立 clone 时的兜底；放在动画项目里则走项目那份）
 ├── tools/                  # 三套自检 + 三个只读 asar 工具
 └── .github/workflows/      # CI：push / PR 自动跑三套自检
@@ -364,7 +408,7 @@ dsh-inju-boot/
 animation every time Harness launches — a procedural 3D daisy blooms, collapses into a particle moon,
 resolves into ghost text and snaps into a solid logo, with a geek HUD/terminal layer (digital rain,
 target lock box, scanline, live point cloud, terminal log, telemetry, hex dump) and a programmatically
-synthesised Apple-keynote-style soundtrack.
+synthesised Apple-keynote-style soundtrack. The hero GIF above walks through all ten stages in 6.3 s.
 
 - **Zero dependencies.** The Host half uses only `node:` built-ins; the browser half only uses the
   `react` the shell already provides. No `@deepseek-ai/*` runtime imports.
